@@ -1,9 +1,10 @@
 import express, { NextFunction } from "express";
-import { Request, Response  } from "express";
+import { Request, Response } from "express";
 
 // importing routes
 import userRoutes from "./routes/user.js";
 import { connectDB } from "./utils/features.js";
+import { errorMiddleware } from "./middlewares/error.js";
 const app = express();
 const port: number = 3000;
 
@@ -17,12 +18,7 @@ app.get("/", (req, res) => {
   res.send("working");
 });
 
-app.use((err:Error , req:Request , res:Response , next:NextFunction)=>{
-    return res.status(400).json({
-        success:true,
-        message:"some erroer"
-    })
-})
+app.use(errorMiddleware);
 
 app.listen(port, () => {
   console.log(`Server is working on http://localhost:${port}`);
