@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { User } from "../models/user.js";
 import { NewUserRequestBody } from "../types/types.js";
 import { TryCatch } from "../middlewares/error.js";
+import ErrorHandler from "../utils/utility-clasee.js";
 
 export const newUser = TryCatch(
   async (
@@ -26,3 +27,13 @@ export const newUser = TryCatch(
     });
   }
 );
+
+export const getAllUsers = TryCatch(async (req, res, next) => {
+  const users = await User.find({});
+
+  return res.status(200).json({
+    success: true,
+    users,
+  });
+});
+
