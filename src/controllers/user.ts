@@ -16,15 +16,15 @@ export const newUser = async (
       photo,
       gender,
       _id,
-      dob,
+      dob: new Date(dob),
     });
 
-    return res.status(300).json({
+    return res.status(201).json({
       sucess: true,
       message: `welcome , ${user.name}`,
     });
   } catch (error) {
-    res.status(300).json({
+    res.status(400).json({
       sucess: true,
       message: `welcome , ${error}`,
     });

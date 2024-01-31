@@ -5,6 +5,7 @@ import { connectDB } from "./utils/features.js";
 const app = express();
 const port = 3000;
 connectDB();
+app.use(express.json());
 // using routers
 app.use("/api/v1/user", userRoutes);
 app.get("/", (req, res) => {

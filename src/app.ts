@@ -7,7 +7,7 @@ const app = express();
 const port: number = 3000;
 
 connectDB();
-
+app.use(express.json());
 // using routers
 app.use("/api/v1/user", userRoutes);
 
