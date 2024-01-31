@@ -14,3 +14,5 @@ export const errorMiddleware = (
     message: err.message,
   });
 };
+
+export const TryCatch = ()=> ()=>{}
