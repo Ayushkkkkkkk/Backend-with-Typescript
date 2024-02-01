@@ -35,3 +35,18 @@ export const newProduct = ProductTryCatch(
     });
   }
 );
+
+export const getLatestProducts = ProductTryCatch(
+  async (
+    req: Request<{}, {}, NewProductRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+
+    return res.status(200).json({
+      sucess: true,
+      products,
+    });
+  }
+);

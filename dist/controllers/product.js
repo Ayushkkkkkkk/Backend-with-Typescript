@@ -25,3 +25,10 @@ export const newProduct = ProductTryCatch(async (req, res, next) => {
         message: "Product created sucessful",
     });
 });
+export const getLatestProducts = ProductTryCatch(async (req, res, next) => {
+    const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+    return res.status(200).json({
+        sucess: true,
+        products,
+    });
+});
