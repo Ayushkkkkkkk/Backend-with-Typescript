@@ -65,3 +65,17 @@ export const getAllCategories = ProductTryCatch(
     });
   }
 );
+
+export const getAdminProducts = ProductTryCatch(
+  async (
+    req: Request<{}, {}, NewProductRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const products = await Product.find({});
+    return res.status(200).json({
+      sucess: true,
+      products,
+    });
+  }
+);

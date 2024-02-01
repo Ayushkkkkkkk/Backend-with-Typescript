@@ -39,3 +39,10 @@ export const getAllCategories = ProductTryCatch(async (req, res, next) => {
         categories,
     });
 });
+export const getAdminProducts = ProductTryCatch(async (req, res, next) => {
+    const products = await Product.find({});
+    return res.status(200).json({
+        sucess: true,
+        products,
+    });
+});
