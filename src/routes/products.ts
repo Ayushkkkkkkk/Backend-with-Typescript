@@ -6,6 +6,8 @@ import {
   getLatestProducts,
   newProduct,
   getSingleProduct,
+  updateProduct,
+  deleteProduct,
 } from "../controllers/product.js";
 import { singleUpload } from "../middlewares/multer.js";
 
@@ -17,6 +19,10 @@ app.get("/categories", getAllCategories);
 
 app.get("/admin-products", getAdminProducts);
 
-app.route("/:id").get(getSingleProduct).put(singleUpload);
+app
+  .route("/:id")
+  .get(getSingleProduct)
+  .put(singleUpload, updateProduct)
+  .delete(deleteProduct);
 
 export default app;

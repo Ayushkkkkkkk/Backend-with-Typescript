@@ -48,8 +48,53 @@ export const getAdminProducts = ProductTryCatch(async (req, res, next) => {
 });
 export const getSingleProduct = ProductTryCatch(async (req, res, next) => {
     const product = await Product.findById(req.params.id);
+    if (!product) {
+        return next(new ErrorHandler("Product not found", 400));
+    }
     return res.status(200).json({
         sucess: true,
         product,
+    });
+});
+export const updateProduct = ProductTryCatch(async (req, res, next) => {
+    const id = req.params.id;
+    const { name, category, price, stock } = req.body;
+    const photo = req.file;
+    const product = await Product.findById(id);
+    if (!product) {
+        return next(new ErrorHandler("invalid product", 400));
+    }
+    if (photo) {
+        rm(product.photo, () => {
+            console.log("old photo deleated");
+        });
+        product.photo = photo.path;
+    }
+    if (name)
+        product.name = name;
+    if (price)
+        product.price = price;
+    if (stock)
+        product.stock = stock;
+    if (category)
+        product.category = category;
+    await product.save();
+    return res.status(200).json({
+        sucess: true,
+        message: "Product updated sucessful",
+    });
+});
+export const deleteProduct = ProductTryCatch(async (req, res, next) => {
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+        return next(new ErrorHandler("invalid product", 400));
+    }
+    rm(product.photo, () => {
+        console.log("Product photo deleted");
+    });
+    await Product.deleteOne();
+    return res.status(200).json({
+        sucess: true,
+        message: "product Deleted succefully",
     });
 });
