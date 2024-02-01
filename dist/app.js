@@ -15,6 +15,8 @@ app.use("/api/v1/product", productRoutes);
 app.get("/", (req, res) => {
     res.send("working");
 });
+//
+app.use("/uploads", express.static("uploads"));
 app.use(errorMiddleware);
 app.listen(port, () => {
     console.log(`Server is working on http://localhost:${port}`);
