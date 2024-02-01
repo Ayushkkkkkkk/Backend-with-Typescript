@@ -12,7 +12,19 @@ export const newUser = TryCatch(
   ) => {
     const { name, email, photo, gender, _id, dob } = req.body;
 
-    const user = await User.create({
+    let user = await User.findById(_id);
+    if (user) {
+      return res.status(200).json({
+        sucess: true,
+        message: `Welcome , ${user.name}`,
+      });
+    }
+
+    if (!_id || !name || !email || !gender || !dob) {
+      return next(new ErrorHandler("Please Add all field", 400));
+    }
+
+    user = await User.create({
       name,
       email,
       photo,
@@ -37,3 +49,16 @@ export const getAllUsers = TryCatch(async (req, res, next) => {
   });
 });
 
+export const getUser = TryCatch(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const user = await User.findById(id);
+
+    if (!user) return next(new ErrorHandler("Invalid Id", 400));
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  }
+);
