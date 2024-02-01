@@ -50,3 +50,18 @@ export const getLatestProducts = ProductTryCatch(
     });
   }
 );
+
+export const getAllCategories = ProductTryCatch(
+  async (
+    req: Request<{}, {}, NewProductRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const categories = await Product.distinct("category");
+
+    return res.status(200).json({
+      sucess: true,
+      categories,
+    });
+  }
+);
