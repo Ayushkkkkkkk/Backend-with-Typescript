@@ -46,3 +46,10 @@ export const getAdminProducts = ProductTryCatch(async (req, res, next) => {
         products,
     });
 });
+export const getSingleProduct = ProductTryCatch(async (req, res, next) => {
+    const product = await Product.findById(req.params.id);
+    return res.status(200).json({
+        sucess: true,
+        product,
+    });
+});

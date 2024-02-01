@@ -79,3 +79,20 @@ export const getAdminProducts = ProductTryCatch(
     });
   }
 );
+
+export const getSingleProduct = ProductTryCatch(
+    async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const product = await Product.findById(req.params.id);
+      return res.status(200).json({
+        sucess: true,
+        product,
+      });
+    }
+  );
+
+
+  
