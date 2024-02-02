@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { ProductTryCatch, TryCatch } from "../middlewares/error.js";
-import { NewProductRequestBody } from "../types/types.js";
+import {
+  BaseQuery,
+  NewProductRequestBody,
+  SearchRequestQuery,
+} from "../types/types.js";
 import { Product } from "../models/product.js";
 import ErrorHandler from "../utils/utility-clasee.js";
 import { rm } from "fs";
@@ -145,10 +149,13 @@ export const deleteProduct = ProductTryCatch(
   }
 );
 
-export const getAllProducts = TryCatch(
-  async (req: Request<{}, {}, {}, SearchRequestQuery>, res, next) => {
+export const getAllProducts = ProductTryCatch(
+  async (
+    req: Request<{}, {}, {}, SearchRequestQuery>,
+    res: Response,
+    next: NextFunction
+  ) => {
     const { search, sort, category, price } = req.query;
-
     const page = Number(req.query.page) || 1;
     // 1,2,3,4,5,6,7,8
     // 9,10,11,12,13,14,15,16
@@ -190,39 +197,3 @@ export const getAllProducts = TryCatch(
     });
   }
 );
-
-
-
-const generateRandomProducts = async (count: number = 10) => {
-  const products = [];
-
-  for (let i = 0; i < count; i++) {
-    const product = {
-      name: faker.commerce.productName(),
-      photo: "uploads\\5ba9bd91-b89c-40c2-bb8a-66703408f986.png",
-      price: faker.commerce.price({ min: 1500, max: 80000, dec: 0 }),
-      stock: faker.commerce.price({ min: 0, max: 100, dec: 0 }),
-      category: faker.commerce.department(),
-      createdAt: new Date(faker.date.past()),
-      updatedAt: new Date(faker.date.recent()),
-      __v: 0,
-    };
-
-    products.push(product);
-  }
-
-  await Product.create(products);
-
-  console.log({ succecss: true });
-};
-
-const deleteRandomsProducts = async (count: number = 10) => {
-  const products = await Product.find({}).skip(2);
-
-  for (let i = 0; i < products.length; i++) {
-    const product = products[i];
-    await product.deleteOne();
-  }
-
-  console.log({ succecss: true });
-};
