@@ -35,6 +35,15 @@ export type SearchRequestQuery = {
   page?: string;
 };
 
+export type InvalidateCacheProps = {
+  product?: boolean;
+  order?: boolean;
+  admin?: boolean;
+  userId?: string;
+  orderId?: string;
+  productId?: string | string[];
+};
+
 export interface BaseQuery {
   name?: {
     $regex: string;

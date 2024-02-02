@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import { myCache } from "../app.js";
+import { InvalidateCacheProps } from "../types/types.js";
+import { Product } from "../models/product.js";
 
 export const connectDB = () => {
   mongoose
@@ -7,4 +10,46 @@ export const connectDB = () => {
     })
     .then((c) => console.log(`db connected to ${c.connection.host}`))
     .catch((e) => console.log(e));
+};
+
+export const invalidateCache = async ({
+  product,
+  order,
+  admin,
+  userId,
+  orderId,
+  productId,
+}: InvalidateCacheProps) => {
+  if (product) {
+    const productKeys: string[] = [
+      "latest-products",
+      "categories",
+      "all-products",
+    ];
+
+    const products = await Product.find({}).select("_id");
+
+    products.forEach((i) => {
+      productKeys.push(`product-${i._id}`);
+    });
+
+    myCache.del(productKeys);
+  }
+  if (order) {
+    const ordersKeys: string[] = [
+      "all-orders",
+      `my-orders-${userId}`,
+      `order-${orderId}`,
+    ];
+
+    myCache.del(ordersKeys);
+  }
+  if (admin) {
+    myCache.del([
+      "admin-stats",
+      "admin-pie-charts",
+      "admin-bar-charts",
+      "admin-line-charts",
+    ]);
+  }
 };

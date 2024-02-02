@@ -9,6 +9,7 @@ import { Product } from "../models/product.js";
 import ErrorHandler from "../utils/utility-clasee.js";
 import { rm } from "fs";
 import { myCache } from "../app.js";
+import { invalidateCache } from "../utils/features.js";
 
 export const newProduct = ProductTryCatch(
   async (
@@ -34,6 +35,7 @@ export const newProduct = ProductTryCatch(
       photo: photo.path,
     });
 
+    await invalidateCache({ product: true });
     return res.status(201).json({
       sucess: true,
       message: "Product created sucessful",
@@ -87,6 +89,7 @@ export const getAllCategories = ProductTryCatch(
     });
   }
 );
+// revalidate cache  on new update or delete in product
 
 export const getAdminProducts = ProductTryCatch(
   async (
@@ -94,9 +97,16 @@ export const getAdminProducts = ProductTryCatch(
     res: Response,
     next: NextFunction
   ) => {
-    const products = await Product.find({});
+    let products;
+    if (myCache.has("all-products"))
+      products = JSON.parse(myCache.get("all-products") as string);
+    else {
+      products = await Product.find({});
+      myCache.set("all-products", JSON.stringify(products));
+    }
+
     return res.status(200).json({
-      sucess: true,
+      success: true,
       products,
     });
   }
@@ -104,13 +114,20 @@ export const getAdminProducts = ProductTryCatch(
 
 export const getSingleProduct = ProductTryCatch(
   async (req: Request, res: Response, next: NextFunction) => {
-    const product = await Product.findById(req.params.id);
+    let product;
+    const id = req.params.id;
+    if (myCache.has(`product-${id}`))
+      product = JSON.parse(myCache.get(`product-${id}`) as string);
+    else {
+      product = await Product.findById(id);
 
-    if (!product) {
-      return next(new ErrorHandler("Product not found", 400));
+      if (!product) return next(new ErrorHandler("Product Not Found", 404));
+
+      myCache.set(`product-${id}`, JSON.stringify(product));
     }
+
     return res.status(200).json({
-      sucess: true,
+      success: true,
       product,
     });
   }
@@ -141,6 +158,8 @@ export const updateProduct = ProductTryCatch(
 
     await product.save();
 
+    await invalidateCache({ product: true });
+
     return res.status(200).json({
       sucess: true,
       message: "Product updated sucessful",
@@ -160,6 +179,8 @@ export const deleteProduct = ProductTryCatch(
     });
 
     await Product.deleteOne();
+
+    await invalidateCache({ product: true });
     return res.status(200).json({
       sucess: true,
       message: "product Deleted succefully",
