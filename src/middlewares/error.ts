@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import ErrorHandler from "../utils/utility-clasee.js";
-import { ControllerType, ProductControllerType } from "../types/types.js";
-
+import { ControllerType, ProductControllerType,orderControllerType } from "../types/types.js";
 export const errorMiddleware = (
   err: ErrorHandler,
   req: Request,
@@ -27,6 +26,12 @@ export const TryCatch =
 
 export const ProductTryCatch =
   (func: ProductControllerType) =>
+  (req: Request, res: Response, next: NextFunction) => {
+    return Promise.resolve(func(req, res, next)).catch(next);
+  };
+
+  export const OrderTryCatch =
+  (func: orderControllerType) =>
   (req: Request, res: Response, next: NextFunction) => {
     return Promise.resolve(func(req, res, next)).catch(next);
   };
