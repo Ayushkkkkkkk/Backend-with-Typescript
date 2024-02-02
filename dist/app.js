@@ -6,12 +6,18 @@ import { errorMiddleware } from "./middlewares/error.js";
 import userRoutes from "./routes/user.js";
 import productRoutes from "./routes/products.js";
 import orderRoutes from "./routes/orders.js";
+import { config } from "dotenv";
+import morgan from "morgan";
+config({
+    path: "./.env",
+});
 const app = express();
 const port = 3000;
 connectDB();
 export const myCache = new NodeCache();
 // middleware
 app.use(express.json());
+app.use(morgan("dev"));
 // using routers
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
