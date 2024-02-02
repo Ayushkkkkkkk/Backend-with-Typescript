@@ -5,6 +5,7 @@ import { errorMiddleware } from "./middlewares/error.js";
 // importing routes
 import userRoutes from "./routes/user.js";
 import productRoutes from "./routes/products.js";
+import orderRoutes from "./routes/orders.js";
 const app = express();
 const port = 3000;
 connectDB();
@@ -14,6 +15,7 @@ app.use(express.json());
 // using routers
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/order", orderRoutes);
 app.get("/", (req, res) => {
     res.send("working");
 });
