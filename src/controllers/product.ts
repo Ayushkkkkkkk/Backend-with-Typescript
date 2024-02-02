@@ -41,16 +41,18 @@ export const newProduct = ProductTryCatch(
   }
 );
 
+// revalidate cache  on new update or delete in product
+
 export const getLatestProducts = ProductTryCatch(
   async (
     req: Request<{}, {}, NewProductRequestBody>,
     res: Response,
     next: NextFunction
   ) => {
-    let products = [];
+    let products;
     if (myCache.has("latest-product"))
       products = JSON.parse(myCache.get("latest-product") as string);
-    else{
+    else {
       products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
       // stores the data in cache memory prevents multiple call to database
       myCache.set("latest-product", JSON.stringify(products));
@@ -62,16 +64,25 @@ export const getLatestProducts = ProductTryCatch(
   }
 );
 
+// revalidate cache  on new update or delete in product
+
 export const getAllCategories = ProductTryCatch(
   async (
     req: Request<{}, {}, NewProductRequestBody>,
     res: Response,
     next: NextFunction
   ) => {
-    const categories = await Product.distinct("category");
+    let categories;
+
+    if (myCache.has("categories"))
+      categories = JSON.parse(myCache.get("categories") as string);
+    else {
+      categories = await Product.distinct("category");
+      myCache.set("categories", JSON.stringify(categories));
+    }
 
     return res.status(200).json({
-      sucess: true,
+      success: true,
       categories,
     });
   }

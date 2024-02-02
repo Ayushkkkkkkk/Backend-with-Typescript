@@ -26,8 +26,9 @@ export const newProduct = ProductTryCatch(async (req, res, next) => {
         message: "Product created sucessful",
     });
 });
+// revalidate cache  on new update or delete in product
 export const getLatestProducts = ProductTryCatch(async (req, res, next) => {
-    let products = [];
+    let products;
     if (myCache.has("latest-product"))
         products = JSON.parse(myCache.get("latest-product"));
     else {
@@ -40,10 +41,17 @@ export const getLatestProducts = ProductTryCatch(async (req, res, next) => {
         products,
     });
 });
+// revalidate cache  on new update or delete in product
 export const getAllCategories = ProductTryCatch(async (req, res, next) => {
-    const categories = await Product.distinct("category");
+    let categories;
+    if (myCache.has("categories"))
+        categories = JSON.parse(myCache.get("categories"));
+    else {
+        categories = await Product.distinct("category");
+        myCache.set("categories", JSON.stringify(categories));
+    }
     return res.status(200).json({
-        sucess: true,
+        success: true,
         categories,
     });
 });
