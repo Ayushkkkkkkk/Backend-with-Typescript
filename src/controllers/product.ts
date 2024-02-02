@@ -8,6 +8,7 @@ import {
 import { Product } from "../models/product.js";
 import ErrorHandler from "../utils/utility-clasee.js";
 import { rm } from "fs";
+import { myCache } from "../app.js";
 
 export const newProduct = ProductTryCatch(
   async (
@@ -46,8 +47,14 @@ export const getLatestProducts = ProductTryCatch(
     res: Response,
     next: NextFunction
   ) => {
-    const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
-
+    let products = [];
+    if (myCache.has("latest-product"))
+      products = JSON.parse(myCache.get("latest-product") as string);
+    else{
+      products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+      // stores the data in cache memory prevents multiple call to database
+      myCache.set("latest-product", JSON.stringify(products));
+    }
     return res.status(200).json({
       sucess: true,
       products,
