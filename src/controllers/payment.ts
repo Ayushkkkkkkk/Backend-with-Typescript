@@ -21,3 +21,21 @@ export const newCoupon = paymentTryCatch(
     });
   }
 );
+
+export const applyDiscount = paymentTryCatch(
+  async (
+    req: Request<{}, {}, couponRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { code } = req.query;
+    const discount = await Coupon.findOne({ code });
+
+    if (!discount) return next(new ErrorHandler("Invalid coupon code", 400));
+
+    return res.status(200).json({
+      sucess: true,
+      discount: discount.amount,
+    });
+  }
+);
