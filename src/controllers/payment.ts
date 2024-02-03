@@ -11,13 +11,13 @@ export const newCoupon = paymentTryCatch(
     next: NextFunction
   ) => {
     const { code, amount } = req.body;
-    if (!code || amount)
-      return next(new ErrorHandler("please enter lates cupon code", 400));
+    if (!code || !amount)
+      return next(new ErrorHandler("please enter latest cupon code", 400));
     await Coupon.create({ code, amount });
 
     return res.status(201).json({
       sucess: true,
-      message: `coupont ${code} created sucessfully`,
+      message: `coupon ${code} created sucessfully`,
     });
   }
 );
