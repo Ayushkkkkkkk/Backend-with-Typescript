@@ -39,3 +39,18 @@ export const applyDiscount = paymentTryCatch(
     });
   }
 );
+
+export const allCoupons = paymentTryCatch(
+  async (
+    req: Request<{}, {}, couponRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const coupons = await Coupon.find({});
+
+    return res.status(200).json({
+      success: true,
+      coupons,
+    });
+  }
+);
