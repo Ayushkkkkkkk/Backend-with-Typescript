@@ -12,12 +12,12 @@ const app = express.Router();
 
 app.get("/discount", applyDiscount);
 
-app.post("/coupon/new", newCoupon);
+app.post("/coupon/new", adminOnly,newCoupon);
 
 
 
-app.get("/coupon/all", allCoupons);
+app.get("/coupon/all",adminOnly, allCoupons);
 
-app.delete("/coupon/:id", deleteCoupon);
+app.delete("/coupon/:id",adminOnly, deleteCoupon);
 
 export default app;
