@@ -17,3 +17,6 @@ export const ProductTryCatch = (func) => (req, res, next) => {
 export const OrderTryCatch = (func) => (req, res, next) => {
     return Promise.resolve(func(req, res, next)).catch(next);
 };
+export const paymentTryCatch = (func) => (req, res, next) => {
+    return Promise.resolve(func(req, res, next)).catch(next);
+};

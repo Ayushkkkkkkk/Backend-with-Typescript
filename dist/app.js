@@ -6,6 +6,7 @@ import { errorMiddleware } from "./middlewares/error.js";
 import userRoutes from "./routes/user.js";
 import productRoutes from "./routes/products.js";
 import orderRoutes from "./routes/orders.js";
+import paymentRoute from "./routes/payment.js";
 import { config } from "dotenv";
 import morgan from "morgan";
 config({
@@ -22,6 +23,7 @@ app.use(morgan("dev"));
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/order", orderRoutes);
+app.use("/api/v1/payment", paymentRoute);
 app.get("/", (req, res) => {
     res.send("working");
 });

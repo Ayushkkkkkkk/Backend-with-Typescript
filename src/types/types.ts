@@ -8,6 +8,11 @@ export interface NewUserRequestBody {
   dob: Date;
 }
 
+export interface couponRequestBody {
+  code: string;
+  amount: string;
+}
+
 export interface NewProductRequestBody {
   name: string;
   category: string;
@@ -23,6 +28,12 @@ export type ControllerType = (
 
 export type ProductControllerType = (
   req: Request<{}, {}, NewProductRequestBody>,
+  res: Response,
+  next: NextFunction
+) => Promise<void | Response<any, Record<string, any>>>;
+
+export type couponControllerType = (
+  req: Request<{}, {}, couponRequestBody>,
   res: Response,
   next: NextFunction
 ) => Promise<void | Response<any, Record<string, any>>>;
