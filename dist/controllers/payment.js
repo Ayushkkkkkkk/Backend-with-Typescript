@@ -28,3 +28,13 @@ export const allCoupons = paymentTryCatch(async (req, res, next) => {
         coupons,
     });
 });
+export const deleteCoupon = paymentTryCatch(async (req, res, next) => {
+    const { id } = req.params;
+    const coupon = await Coupon.findByIdAndDelete(id);
+    if (!coupon)
+        return next(new ErrorHandler("Invalid Coupon ID", 400));
+    return res.status(200).json({
+        success: true,
+        message: `Coupon ${coupon.code} Deleted Successfully`,
+    });
+});

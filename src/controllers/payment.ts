@@ -54,3 +54,18 @@ export const allCoupons = paymentTryCatch(
     });
   }
 );
+
+export const deleteCoupon = paymentTryCatch(
+  async (req:Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+  const coupon = await Coupon.findByIdAndDelete(id);
+
+  if (!coupon) return next(new ErrorHandler("Invalid Coupon ID", 400));
+
+  return res.status(200).json({
+    success: true,
+    message: `Coupon ${coupon.code} Deleted Successfully`,
+  });
+  }
+);
