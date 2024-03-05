@@ -1,11 +1,11 @@
-import { TryCatch, OrderTryCatch } from "../middlewares/error.js";
-import { Request, Response, NextFunction } from "express";
-import { NewOrderRequestBody } from "../types/types.js";
+import { NextFunction, Request, Response } from "express";
+
+import { myCache } from "../app.js";
+import { OrderTryCatch, TryCatch } from "../middlewares/error.js";
 import { Order } from "../models/order.js";
+import { NewOrderRequestBody } from "../types/types.js";
 import { invalidateCache, reduceStock } from "../utils/features.js";
 import ErrorHandler from "../utils/utility-clasee.js";
-import { myCache } from "../app.js";
-
 export const newOrder = OrderTryCatch(
   async (req: Request<{}, {}, NewOrderRequestBody>, res, next) => {
     const {
@@ -52,12 +52,11 @@ export const newOrder = OrderTryCatch(
       productId: order.orderItems.map((i) => String(i.productId)),
     });
 
-
     res.status(201).json({
       sucess: true,
       message: "order placed sucessfully",
     });
-  }
+  },
 );
 
 export const myOrder = OrderTryCatch(
@@ -77,7 +76,7 @@ export const myOrder = OrderTryCatch(
       success: true,
       orders,
     });
-  }
+  },
 );
 
 export const allOrders = OrderTryCatch(
@@ -95,7 +94,7 @@ export const allOrders = OrderTryCatch(
       success: true,
       orders,
     });
-  }
+  },
 );
 
 export const getSingleOrder = OrderTryCatch(async (req: Request, res, next) => {

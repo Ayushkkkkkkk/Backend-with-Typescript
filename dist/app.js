@@ -8,8 +8,8 @@ import productRoutes from "./routes/products.js";
 import orderRoutes from "./routes/orders.js";
 import paymentRoute from "./routes/payment.js";
 import dashboardRoute from "./routes/stats.js";
-import { config } from "dotenv";
 import morgan from "morgan";
+import { config } from "process";
 config({
     path: "./.env",
 });

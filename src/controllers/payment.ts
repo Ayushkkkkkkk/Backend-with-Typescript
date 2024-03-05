@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import { couponRequestBody } from "../types/types.js";
 import { Coupon } from "../models/coupon.js";
 import ErrorHandler from "../utils/utility-clasee.js";
-
+import { stripe } from "../app.js";
 export const newCoupon = paymentTryCatch(
   async (
     req: Request<{}, {}, couponRequestBody>,
@@ -56,16 +56,38 @@ export const allCoupons = paymentTryCatch(
 );
 
 export const deleteCoupon = paymentTryCatch(
-  async (req:Request, res: Response, next: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
 
-  const coupon = await Coupon.findByIdAndDelete(id);
+    const coupon = await Coupon.findByIdAndDelete(id);
 
-  if (!coupon) return next(new ErrorHandler("Invalid Coupon ID", 400));
+    if (!coupon) return next(new ErrorHandler("Invalid Coupon ID", 400));
 
-  return res.status(200).json({
-    success: true,
-    message: `Coupon ${coupon.code} Deleted Successfully`,
-  });
+    return res.status(200).json({
+      success: true,
+      message: `Coupon ${coupon.code} Deleted Successfully`,
+    });
+  }
+);
+
+export const createPaymentIntent = paymentTryCatch(
+  async (
+    req: Request<{}, {}, couponRequestBody>,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { amount } = req.body;
+
+    if (!amount) return next(new ErrorHandler("Please enter amount", 400));
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Number(amount) * 100,
+      currency: "npr",
+    });
+
+    return res.status(201).json({
+      success: true,
+      clientSecret: paymentIntent.client_secret,
+    });
   }
 );

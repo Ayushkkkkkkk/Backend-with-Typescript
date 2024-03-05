@@ -15,7 +15,7 @@ export const newProduct = ProductTryCatch(
   async (
     req: Request<{}, {}, NewProductRequestBody>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     const { name, category, price, stock } = req.body;
     const photo = req.file;
@@ -40,7 +40,7 @@ export const newProduct = ProductTryCatch(
       sucess: true,
       message: "Product created sucessful",
     });
-  }
+  },
 );
 
 // revalidate cache  on new update or delete in product
@@ -49,7 +49,7 @@ export const getLatestProducts = ProductTryCatch(
   async (
     req: Request<{}, {}, NewProductRequestBody>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     let products;
     if (myCache.has("latest-product"))
@@ -63,7 +63,7 @@ export const getLatestProducts = ProductTryCatch(
       sucess: true,
       products,
     });
-  }
+  },
 );
 
 // revalidate cache  on new update or delete in product
@@ -72,7 +72,7 @@ export const getAllCategories = ProductTryCatch(
   async (
     req: Request<{}, {}, NewProductRequestBody>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     let categories;
 
@@ -87,7 +87,7 @@ export const getAllCategories = ProductTryCatch(
       success: true,
       categories,
     });
-  }
+  },
 );
 // revalidate cache  on new update or delete in product
 
@@ -95,7 +95,7 @@ export const getAdminProducts = ProductTryCatch(
   async (
     req: Request<{}, {}, NewProductRequestBody>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     let products;
     if (myCache.has("all-products"))
@@ -109,7 +109,7 @@ export const getAdminProducts = ProductTryCatch(
       success: true,
       products,
     });
-  }
+  },
 );
 
 export const getSingleProduct = ProductTryCatch(
@@ -130,7 +130,7 @@ export const getSingleProduct = ProductTryCatch(
       success: true,
       product,
     });
-  }
+  },
 );
 
 export const updateProduct = ProductTryCatch(
@@ -164,7 +164,7 @@ export const updateProduct = ProductTryCatch(
       sucess: true,
       message: "Product updated sucessful",
     });
-  }
+  },
 );
 
 export const deleteProduct = ProductTryCatch(
@@ -185,14 +185,14 @@ export const deleteProduct = ProductTryCatch(
       sucess: true,
       message: "product Deleted succefully",
     });
-  }
+  },
 );
 
 export const getAllProducts = ProductTryCatch(
   async (
     req: Request<{}, {}, {}, SearchRequestQuery>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     const { search, sort, category, price } = req.query;
     const page = Number(req.query.page) || 1;
@@ -231,7 +231,5 @@ export const getAllProducts = ProductTryCatch(
       products,
       totalPage,
     });
-  }
+  },
 );
-
-

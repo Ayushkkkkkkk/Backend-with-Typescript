@@ -1,7 +1,6 @@
 import express, { NextFunction } from "express";
 import { Request, Response } from "express";
 import NodeCache from "node-cache";
-
 import { connectDB } from "./utils/features.js";
 import { errorMiddleware } from "./middlewares/error.js";
 
@@ -11,16 +10,15 @@ import productRoutes from "./routes/products.js";
 import orderRoutes from "./routes/orders.js";
 import paymentRoute from "./routes/payment.js";
 import dashboardRoute from "./routes/stats.js";
-import { config } from "dotenv";
+
 import morgan from "morgan";
+import { config } from "dotenv";
 
 config({
   path: "./.env",
 });
-
 const app = express();
 const port: number = 3000;
-
 connectDB();
 
 export const myCache = new NodeCache();

@@ -3,6 +3,7 @@ import { myCache } from "../app.js";
 import { InvalidateCacheProps , OrderItemType } from "../types/types.js";
 import { Product } from "../models/product.js";
 
+
 export const connectDB = () => {
   mongoose
     .connect("mongodb://localhost:27017", {
@@ -100,12 +101,19 @@ interface MyDocument extends Document {
   discount?: number;
   total?: number;
 }
+
+
+
+
+
 type FuncProps = {
   length: number;
   docArr: MyDocument[];
   today: Date;
   property?: "discount" | "total";
 };
+
+
 
 export const getChartData = ({
   length,
@@ -130,5 +138,16 @@ export const getChartData = ({
 
   return data;
 };
+
+
+
+
+
+
+
+
+
+
+
 
 
